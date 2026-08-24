@@ -3,7 +3,7 @@ import time
 import random
 from test_ai import get_raw_issue
 from styles import format_suggestion
-from db import init_db, log_action
+from db import init_db, log_action, get_next_style
 
 st.set_page_config(page_title="Adaptive Code Review", page_icon="🕵️", layout="centered")
 
@@ -77,7 +77,7 @@ if st.button("🚨 OPEN THE CASE", use_container_width=True) and code and studen
     avatar = random.choice(avatars)
     with st.spinner(f"{avatar} Examining the evidence..."):
         raw_issue = get_raw_issue(code)
-        style = "bare"  # adaptive logic plugs in here later
+        style = get_next_style(student_id)  # adaptive logic starts from here
         st.session_state.suggestion = format_suggestion(raw_issue, style)
         st.session_state.style = style
         st.session_state.start_time = time.time()

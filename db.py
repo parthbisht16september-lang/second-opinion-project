@@ -27,3 +27,15 @@ def get_student_history(student_id, limit=5):
                          (student_id, limit)).fetchall()
     conn.close()
     return [r[0] for r in rows]
+
+def get_next_style(student_id):
+    history = get_student_history(student_id, limit=5)
+    if len(history) < 3:
+        return "bare"  # not enough data yet, use default
+    accept_rate = history.count("accept") / len(history)
+    if accept_rate > 0.7:
+        return "confidence"   # over-truster → nudge toward verification
+    elif accept_rate < 0.3:
+        return "socratic"     # under-truster → give more justification
+    else:
+        return "bare"         # calibrated → keep it simple
