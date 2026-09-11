@@ -99,21 +99,24 @@ if "suggestion" in st.session_state:
     col1, col2, col3 = st.columns(3)
 
     def handle(action, msg):
-        decision_time = time.time() - st.session_state.start_time
-        log_action(student_id, st.session_state.style, action, decision_time)
-        st.toast(msg, icon="🕵️")
-        if action == "accept":
-            st.balloons()
-        elif action == "reject":
-            st.snow()
+    decision_time = time.time() - st.session_state.start_time
+    log_action(student_id, st.session_state.style, action, decision_time)
 
-    if col1.button("✅ CASE CLOSED", use_container_width=True):
-        handle("accept", "Case closed — trusted the finding!")
-    if col2.button("❌ NOT BUYING IT", use_container_width=True):
-        handle("reject", "Rejected — detective's gut says no.")
-    if col3.button("🔎 NEED MORE PROOF", use_container_width=True):
-        handle("verify", "Digging deeper before deciding...")
+    if action == "accept":
+        st.success(f"✅ {msg}")
+        st.balloons()
+    elif action == "reject":
+        st.error(f"❌ {msg}")
+        st.snow()
+    elif action == "verify":
+        st.warning(f"🔎 {msg}")
 
+if col1.button("✅ CASE CLOSED", use_container_width=True):
+    handle("accept", "Case closed — trusted the finding!")
+if col2.button("❌ NOT BUYING IT", use_container_width=True):
+    handle("reject", "Rejected — detective's gut says no.")
+if col3.button("🔎 NEED MORE PROOF", use_container_width=True):
+    handle("verify", "Flagged for further investigation. Digging deeper...")
 st.write("")
 st.markdown(
     "<p style='text-align:center; color:#6e5c99; font-size:0.75rem;'>SECOND OPINION RESEARCH PROJECT · HUMAN-AI INTERACTION STUDY</p>",
